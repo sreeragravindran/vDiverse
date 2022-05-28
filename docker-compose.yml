@@ -1,0 +1,33 @@
+version: "2.2"
+services:
+  service:
+    image: elixir:1.13.4
+    volumes:
+      - ./service:/app
+    working_dir: /app
+    command: ["sh", "-c", "mix local.hex --force && mix deps.get && mix phx.server"]
+    ports:
+      - 4000:4000
+      - 4001:4001
+    environment:
+      - HEX_UNSAFE_HTTPS=1
+  # ui:
+  #   image: node:18
+  #   container_name: vdiverse-ui
+  #   volumes:
+  #     - ./ui/vDiverse.2/:/app
+  #   working_dir: /app
+  #   ports:
+  #     - 8080:8080
+  #   command: ["sh", "-c", "npm install && npm run dev"]
+  database:
+    image: postgres:14.3
+    container_name: vDiverse-postgres
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=diverseDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
